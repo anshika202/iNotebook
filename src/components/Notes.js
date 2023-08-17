@@ -57,7 +57,7 @@ const Notes = () => {
                         </div>
                         <div className="modal-body">
                             <form>
-                                <div className="mb-3">
+                                <div className="mb-3">  
                                     <label htmlFor="title" className="form-label">title</label>
                                     <input type="text" className="form-control" id="etitle" value={note.etitle} name="etitle" aria-describedby="emailHelp" onChange={onChange} />
                                 </div>
