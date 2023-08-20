@@ -1,10 +1,10 @@
 import React, {useContext} from 'react'
 import Notes from './Notes'
 
-const Home = () => {
+const Home = (props) => {
   return (
     <div>
-    <Notes/>
+    <Notes showAlert = {props.showAlert}/>
 
     </div>
   )

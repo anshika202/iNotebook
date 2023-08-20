@@ -2,16 +2,24 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import noteContext from '../context/notes/noteContext'
 import NoteItem from './NoteItem'
 import Addnote from './Addnote'
+import { useNavigate } from 'react-router-dom'
 
 
 
-const Notes = () => {
+const Notes = (props) => {
 
     const context = useContext(noteContext)
     const { notes, getNotes, editNote } = context
+    let navigate = useNavigate();
 
     useEffect(() => {
-        getNotes()
+        if(localStorage.getItem('token'))
+        {
+            getNotes()
+        }
+        else{
+           navigate('/login') 
+        }
        
     }, [])
 
@@ -25,6 +33,7 @@ const Notes = () => {
     const updateNotes = async (currentNote) => {
         ref.current.click();
         setNotes({ id: currentNote._id, etitle: currentNote.title, edescription: currentNote.description, etag: currentNote.tag })
+        
     }
 
 
@@ -32,6 +41,7 @@ const Notes = () => {
     const handleClick =  (e) => {
         editNote(note.id, note.etitle, note.edescription, note.etag)
         refClose.current.click();
+        props.showAlert(" Note Upadated","success")
     }
 
 
@@ -42,7 +52,7 @@ const Notes = () => {
 
     return (
         <>
-            <Addnote />
+            <Addnote showAlert = {props.showAlert}/>
 
             <button type="button" ref={ref} className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Launch demo modal
@@ -80,13 +90,15 @@ const Notes = () => {
                 </div>
             </div>
             <div className="row my-3 ">
-                <h1>
-                    your notes
-                </h1>
-                {notes.map((notes) => {
-                    return <NoteItem key={notes._id} updateNotes={updateNotes} notes={notes} />
-                })}
-            </div>
+      <h1>Your Notes</h1>
+      {Array.isArray(notes) ? (
+        notes.map((note) => (
+          <NoteItem key={note._id} updateNotes={updateNotes} notes={note} />
+        ))
+      ) : (
+        <p>No notes yet</p>
+      )}
+    </div>
         </>
     )
 }
